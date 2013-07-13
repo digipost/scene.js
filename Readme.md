@@ -38,7 +38,6 @@ var mymodel = {
 
 };
 
-```javascript
 scene(mymodel, { name: 'world' }, function(view) {
     console.log(view.el.html());
     // => '<div>Hello <span style="color:red">WORLD</span>!</div>'
