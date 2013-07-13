@@ -7,36 +7,41 @@ Scene.js is a small JavaScript library for rendering view models. A view consist
 This example assumes you are using jQuery and underscore.js, but those are completely optional.
 
 ```html
-<!-- template.html -->
+<!-- mytemplate.html -->
 <div>Hello <span><%= greet() %></span>!</div>
 ```
 
 ```javascript
-// This is my view model.
-var model = {
+var mymodel = {
 
-    // The URL to your template file. This could also be a string of HTML.
-    template: 'templates/mytemplate.html',
+    // The URL to your template file.
+    // This could also be a string of HTML.
+    template: 'mytemplate.html',
 
-    // This is run before the HTML is compiled. Use it to set or change properties.
+    // This is run before the HTML is compiled.
+    // Use it to set or change properties.
     before: function() {
         this.name = this.name.toUpperCase();
     },
 
-    // This is run after the HTML is compiled. Use it to add listeners, change HTML etc.
+    // This is run after the HTML is compiled.
+    // Use it to add listeners, change HTML etc.
     init: function() {
         this.$('span').css('color', 'red');
     },
 
-    // All methods and properties are available to the HTML templating language.
+    // All methods and properties are available
+    // to the HTML templating language.
     greet: function() {
         return this.name;
     }
 
 };
 
-scene(model, { name: 'world' }, function(view) {
-    console.log(view.el.html()); // => '<div>Hello <span style="color:red">WORLD</span>!</div>'
+```javascript
+scene(mymodel, { name: 'world' }, function(view) {
+    console.log(view.el.html());
+    // => '<div>Hello <span style="color:red">WORLD</span>!</div>'
 });
 ```
 
