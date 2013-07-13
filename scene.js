@@ -4,9 +4,9 @@
     /*
      * Render a view model from a prototype and a data object.
      *
-     * @proto The prototype specifies the properties of the view model.
-     * @data The data object holds specific properties for this instance.
-     * @callback Called with the rendered view model instance.
+     * @proto: The prototype specifies the properties of the view model.
+     * @data: The data object holds specific properties for this instance.
+     * @callback: Called with the rendered view model instance.
      */
     var scene = root.scene = function(proto, data, callback) {
         var view = instance(proto || {}, data || {});
@@ -19,7 +19,7 @@
     /*
      * Add middleware functions to view model rendering.
      *
-     * @fn A function that recieves and modifies the view model.
+     * @fn: A function that recieves and modifies the view model.
      */
     scene.use = function(fn) {
         if(fn) F.push(fn);
@@ -103,8 +103,8 @@
      * @html: The HTML to insert.
      */
     scene.append = function(el, html) {
-        if(root.$) return root.$(el).append(html);
-        return el.innerHTML = html;
+        if(root.$) root.$(el).append(html);
+        else el.innerHTML = html;
     };
 
     /*
@@ -141,7 +141,7 @@
      * Internal: Create the HTML element for this view from compiled HTML.
      */
     var el = function(view, html) {
-        if(!view.el) view.el = scene.el(html);
+        if(!view.el) view.el = scene.el();
         if(html) scene.append(view.el, html);
         view.$ = function(selector) {
             return scene.find(this.el, selector);
