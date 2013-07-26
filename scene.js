@@ -1,5 +1,5 @@
 ;(function(root) {
-    "use strict";
+    'use strict';
 
     /*
      * Render a view model from a prototype and a data object.
@@ -11,18 +11,35 @@
     var scene = root.scene = function(proto, data, callback) {
         var view = instance(proto || {}, data || {});
         render(view, function() {
-            if(scene.after) scene.after(view);
-            if(callback) callback(view);
+            if (scene.after) scene.after(view);
+            if (callback) callback(view);
         });
     };
 
     /*
-     * Add middleware functions to view model rendering.
+     * Add middleware filters to view model rendering.
      *
      * @fn: A function that recieves and modifies the view model.
      */
     scene.use = function(fn) {
-        if(fn) F.push(fn);
+        if (fn) F.push(fn);
+    };
+
+    /*
+     * Add methods and properties to the default view model prototype.
+     *
+     * @name: The property name.
+     * @val: The value or method.
+     */
+    scene.fn = function(name, val) {
+        if (name) P[name] = val;
+    };
+
+    /*
+     * Remove all compiled templates, middleware filters and prototype additions.
+     */
+    scene.reset = function() {
+        C = {}; F = []; P = {};
     };
 
     /*
@@ -34,10 +51,10 @@
      * The default hook will use jQuery if available, or plain XHR.
      */
     scene.get = function(template, callback) {
-        if(root.$ && root.$.get) return root.$.get(template, callback, "text");
+        if (root.$ && root.$.get) return root.$.get(template, callback, 'text');
         var req = new XMLHttpRequest();
         req.onload = function() { callback(this.responseText); };
-        req.open("get", template, true);
+        req.open('get', template, true);
         req.send();
     };
 
@@ -50,7 +67,7 @@
      * The default hook will use _.template if available, or skip compilation.
      */
     scene.compile = function(html) {
-        if(root._ && root._.template) return root._.template(html);
+        if (root._ && root._.template) return root._.template(html);
         return html;
     };
 
@@ -63,9 +80,9 @@
      * The default hook will use jQuery if available, or create a document fragment.
      */
     scene.el = function() {
-        if(root.$) return root.$("<div>");
+        if (root.$) return root.$('<div>');
         return document.createDocumentFragment()
-            .appendChild(document.createElement("div"));
+            .appendChild(document.createElement('div'));
     };
 
     /*
@@ -77,7 +94,7 @@
      * The default hook will use jQuery if available, or use querySelectorAll.
      */
     scene.find = function(el, selector) {
-        if(root.$) return root.$(el).find(selector);
+        if (root.$) return root.$(el).find(selector);
         return el.querySelectorAll(selector);
     };
 
@@ -91,9 +108,9 @@
      * The default hook will use jQuery if available, or appendChild.
      */
     scene.insert = function(el, selector, html) {
-        if(root.$) return root.$(el).find(selector).html(html);
+        if (root.$) return root.$(el).find(selector).html(html);
         var match = el.querySelector(selector);
-        if(match) match.appendChild(html);
+        if (match) match.appendChild(html);
     };
 
     /*
@@ -103,7 +120,7 @@
      * @html: The HTML to insert.
      */
     scene.append = function(el, html) {
-        if(root.$) root.$(el).append(html);
+        if (root.$) root.$(el).append(html);
         else el.innerHTML = html;
     };
 
@@ -112,11 +129,11 @@
      */
     var render = function(view, callback) {
         compiler(view, function(comp) {
-            if(scene.before) scene.before(view);
-            if(view.before) view.before(view);
-            el(view, invoke({ c: comp }, "c", view));
-            if(view.init) view.init(view);
-            for(var i = 0; i < F.length; i++) F[i](view);
+            if (scene.before) scene.before(view);
+            if (view.before) view.before(view);
+            el(view, invoke({ c: comp }, 'c', view));
+            if (view.init) view.init(view);
+            for (var i = 0; i < F.length; i++) F[i](view);
             callback();
         });
     };
@@ -125,11 +142,11 @@
      * Internal: Download and compile a template file.
      */
     var compiler = function(view, callback) {
-        if(!view.template)
+        if (!view.template)
             callback();
-        else if(C[view.template])
+        else if (C[view.template])
             callback(C[view.template]);
-        else if(view.template.indexOf("<") === 0)
+        else if (view.template.indexOf('<') === 0)
             callback(scene.compile(view.template));
         else scene.get(view.template, function(html) {
             C[view.template] = scene.compile(html);
@@ -141,8 +158,9 @@
      * Internal: Create the HTML element for this view from compiled HTML.
      */
     var el = function(view, html) {
-        if(!view.el) view.el = scene.el();
-        if(html) scene.append(view.el, html);
+        if (!view.el) view.el = scene.el();
+        if (html) scene.append(view.el, html);
+        extend(view, P);
         view.$ = function(selector) {
             return scene.find(this.el, selector);
         };
@@ -150,8 +168,8 @@
             var subview = instance(proto || {}, data || {});
             render(subview, function() {
                 scene.insert(view.el, selector, subview.el);
-                if(scene.after) scene.after(subview);
-                if(callback) callback(subview);
+                if (scene.after) scene.after(subview);
+                if (callback) callback(subview);
             });
         };
     };
@@ -160,13 +178,10 @@
      * Internal: Instantiate a view model from a prototype and properties.
      */
     var instance = function(proto, data) {
-        if(typeof proto === "string")
-            proto = { template: proto };
+        if (typeof proto === 'string') proto = { template: proto };
         var model = create(proto);
-        for(var key in data)
-            if(data.hasOwnProperty(key))
-                model[key] = data[key];
-        model.template = invoke(model, "template");
+        extend(model, data);
+        model.template = invoke(model, 'template');
         return model;
     };
 
@@ -174,17 +189,26 @@
      * Internal: Create a new object from a prototype.
      */
     var create = function(proto) {
-        if(Object.create) return Object.create(proto);
+        if (Object.create) return Object.create(proto);
         var O = function() {};
         O.prototype = proto;
         return new O();
     };
 
     /*
+     * Internal: Extend object with other properties.
+     */
+    var extend = function(obj, props) {
+        for (var key in props)
+            if (props.hasOwnProperty(key))
+                obj[key] = props[key];
+    };
+
+    /*
      * Internal: Invoke something if it is a function, or return if key.
      */
     var invoke = function(obj, key) {
-        return typeof obj[key] === "function" ?
+        return typeof obj[key] === 'function' ?
             obj[key].apply(obj, [].slice.call(arguments, 2)) :
             obj[key] ? obj[key] : null;
     };
@@ -198,5 +222,10 @@
      * Internal: An array of middleware filters.
      */
     var F = [];
+
+    /*
+     * Internal: View model prototype.
+     */
+    var P = {};
 
 }(this));

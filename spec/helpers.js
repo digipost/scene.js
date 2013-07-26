@@ -1,9 +1,4 @@
 /*
- * Global variables from external scripts.
- */
-mocha.setup({ globals: ["_gaq", "_gat", "gaGlobal", "adf", "jQuery*"] });
-
-/*
  * Expose test helpers.
  */
 var assert = chai.assert, expect = chai.expect, should = chai.should();
@@ -30,4 +25,5 @@ var reset = function() {
     Object.keys(dependencies).forEach(function(key) {
         window[key] = undefined;
     });
+    scene.reset();
 };
