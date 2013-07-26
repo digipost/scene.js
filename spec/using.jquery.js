@@ -1,4 +1,4 @@
-describe('views.js', function() {
+describe('using.jquery.js', function() {
 
     before(function() {
         reset();

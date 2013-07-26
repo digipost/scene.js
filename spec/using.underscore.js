@@ -1,4 +1,4 @@
-describe('views.js', function() {
+describe('using.underscore.js', function() {
 
     before(function() {
         reset();
