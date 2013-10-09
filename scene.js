@@ -45,16 +45,16 @@
     /*
      * Hook: Get a template from the server.
      *
-     * @template: The template property, or result of the template function.
+     * @view: The view model.
      * @callback: Must be called by this function with the template HTML.
      *
      * The default hook will use jQuery if available, or plain XHR.
      */
-    scene.get = function(template, callback) {
-        if (root.$ && root.$.get) return root.$.get(template, callback, 'text');
+    scene.get = function(view, callback) {
+        if (root.$ && root.$.get) return root.$.get(view.template, callback, 'text');
         var req = new XMLHttpRequest();
         req.onload = function() { callback(this.responseText); };
-        req.open('get', template, true);
+        req.open('get', view.template, true);
         req.send();
     };
 
@@ -148,7 +148,7 @@
             callback(C[view.template]);
         else if (view.template.indexOf('<') === 0)
             callback(scene.compile(view.template));
-        else scene.get(view.template, function(html) {
+        else scene.get(view, function(html) {
             C[view.template] = scene.compile(html);
             callback(C[view.template]);
         });
