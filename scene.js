@@ -171,6 +171,7 @@
                 if (scene.after) scene.after(subview);
                 if (callback) callback(subview);
             });
+            return subview;
         };
     };
 
