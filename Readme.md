@@ -168,3 +168,7 @@ scene.insert = function(el, selector, html)  { ... };
  */
 scene.append = function(el, html) { ... };
 ```
+
+## License
+
+MIT.
