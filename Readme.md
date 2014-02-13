@@ -171,4 +171,4 @@ scene.append = function(el, html) { ... };
 
 ## License
 
-MIT.
+MIT. See LICENSE.
