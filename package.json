@@ -1,7 +1,7 @@
 {
   "name": "scene.js",
   "author": "Olav Bjørkøy",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Scene.js is a small JavaScript library for rendering view models. A view consists of a JS object (the model), an HTML file (the template), and an object with properties (the data). Scene.js takes care of loading the template, compiling it with the model, and adds a few helpful methods.",
   "main": "scene.js",
   "license": "MIT"
