@@ -1,8 +1,22 @@
 {
-  "name": "scene.js",
+  "name": "@digipost/scene.js",
   "author": "Olav Bjørkøy",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "description": "Scene.js is a small JavaScript library for rendering view models. A view consists of a JS object (the model), an HTML file (the template), and an object with properties (the data). Scene.js takes care of loading the template, compiling it with the model, and adds a few helpful methods.",
   "main": "scene.js",
-  "license": "MIT"
+  "scripts": {
+    "release": "npm run verify:not-published",
+    "verify:not-published": "! npm show . versions -s --json | grep -q \\\"${npm_package_version}\\\"",
+    "test": "karma start --single-run"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "karma": "2.0.0",
+    "karma-chrome-launcher": "2.2.0",
+    "karma-mocha": "1.3.0",
+    "mocha": "5.0.1"
+  },
+  "publishConfig": {
+    "registry": "https://repo3.dgp.st/repository/npm-private/"
+  }
 }
