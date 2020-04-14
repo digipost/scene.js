@@ -1,0 +1,40 @@
+name: Build and publish scene.js
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-publish:
+    name: Build scene.js
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.digipost_bot_personal_access_token }}
+          fetch-depth: 0
+      - name: Fetch tags
+        run: |
+          git fetch --tags
+          git describe
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: npm install and build
+        run: |
+          npm ci -q
+          npm run release
+        env:
+          CI: true
+      - name: publish and commit
+        run: |
+          git config --global user.email "support@digipost.no"
+          git config --global user.name "Digipost Bot"
+          echo "//npm.pkg.github.com/:_authToken=$NODE_AUTH_TOKEN" >> ~/.npmrc
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.digipost_bot_personal_access_token}}
