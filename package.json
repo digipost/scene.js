@@ -16,7 +16,8 @@
     "karma-mocha": "1.3.0",
     "mocha": "5.0.1"
   },
-  "publishConfig": {
-    "registry": "https://repo3.dgp.st/repository/npm-private/"
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digipost/scene.js.git"
+  },
 }
