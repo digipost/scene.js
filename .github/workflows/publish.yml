@@ -4,16 +4,16 @@ on:
   release:
     types: [created]
 
-jobs:        
+jobs:
   publish-gpr:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
         with:
-          node-version-file: '.nvmrc'
-          registry-url: 'https://npm.pkg.github.com/'
-      - run: npm i -q --production
+          node-version-file: ".nvmrc"
+          registry-url: "https://npm.pkg.github.com/"
+      - run: npm ci -q
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
