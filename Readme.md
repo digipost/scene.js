@@ -2,6 +2,21 @@
 
 Scene.js is a small JavaScript library for rendering view models. A view consists of a JS object (the model), an HTML file (the template), and an object with properties (the data). Scene.js takes care of loading the template, compiling it with the model, and adds a few helpful methods.
 
+
+
+## Deploy
+
+1. Gjør endringer
+2. Sett ny versjon ved `npm version <major|minor|patch>`
+3. Autentiser deg mot npm registry, feks slik:
+   1. Lag et personlig (legacy) accesstoken på [GitHub](https://github.com/settings/tokens) med scope write-packages.
+   2. Kjør `npm login --scope=@digipost --auth-type=legacy --registry=https://npm.pkg.github.com`
+   3. Når du blir spurt om "Username", bruk github-brukernavnet ditt, for "Password" bruker du tokenet du lagde i starten, hvis du blir spurt om email så velg en e-postadresse du har brukt på github.
+4. Kjør `npm publish`
+5. Push versjons-committen og -taggen: `git push && git push origin v3.0.0` <-- BYTT UT VERSJONSNUMMERET!
+6. Opprett Release på GitHub for taggen: https://github.com/digipost/pacbot/releases/new
+
+
 ## Example
 
 This example assumes you are using jQuery and underscore.js, but those are completely optional.
