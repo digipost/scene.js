@@ -1,7 +1,7 @@
 {
   "name": "@digipost/scene.js",
   "author": "Olav Bjørkøy",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "Scene.js is a small JavaScript library for rendering view models. A view consists of a JS object (the model), an HTML file (the template), and an object with properties (the data). Scene.js takes care of loading the template, compiling it with the model, and adds a few helpful methods.",
   "main": "scene.js",
   "scripts": {
